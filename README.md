@@ -8,18 +8,18 @@ Goals:
 However, that requires to script every change.
 
 ## Files
-Choco_installs.ps1
+_Choco_installs.ps1_
 Installs tools.
 
-AlwaysOnTop.ahk
-Hotkeys. Should go to autoruns.
+_AlwaysOnTop.ahk_
+Hotkeys. Should go to autoruns folder.
 
-Microsoft.PowerShell_profile.ps1
+_Microsoft.PowerShell_profile.ps1_
 Powershell profile for suitable command prompt with git branch. Should go to all possible powershell profiles
 
 ## TODO
 - add more configs:
     - Fiddler,
     - ConEmu;
-- script to automatically sync files;
+- automatically sync files;
 - test automated install on virtual machine.
