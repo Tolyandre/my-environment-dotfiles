@@ -8,14 +8,17 @@ Goals:
 However, that requires to script every change.
 
 ## Files
-_Choco_installs.ps1_
+### Choco_installs.ps1
 Installs tools.
 
-_AlwaysOnTop.ahk_
+### AlwaysOnTop.ahk
 Hotkeys. Should go to autoruns folder.
 
-_Microsoft.PowerShell_profile.ps1_
+### Microsoft.PowerShell_profile.ps1
 Powershell profile for suitable command prompt with git branch. Should go to all possible powershell profiles
+
+### ConEmu.xml
+My terminal settings. Normally goes to `C:\Users\%user%\AppData\Roaming\ConEmu.xml`.
 
 ## TODO
 - add more configs:
