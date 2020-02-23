@@ -14,8 +14,8 @@ Installs tools.
 ### AlwaysOnTop.ahk
 Hotkeys. Should go to autoruns folder.
 
-### Microsoft.PowerShell_profile.ps1
-Powershell profile for suitable command prompt with git branch. Should go to all possible powershell profiles
+### profile.ps1
+Powershell profile with git prompt and some config for Unix tools.
 
 ### ConEmu.xml
 My terminal settings. Normally goes to `C:\Users\%user%\AppData\Roaming\ConEmu.xml`.

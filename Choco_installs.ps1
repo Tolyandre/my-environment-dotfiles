@@ -12,3 +12,6 @@ choco install autohotkey
 # git
 ## TODO: consider option /WindowsTerminal
 choco install git.install --params "/GitAndUnixToolsOnPath /NoShellIntegration /SChannel"
+
+# Link Shell Extension https://schinagl.priv.at/nt/hardlinkshellext/hardlinkshellext.html
+choco install linkshellextension
