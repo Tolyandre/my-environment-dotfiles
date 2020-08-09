@@ -3,4 +3,4 @@
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
-^f8::  Winset, Alwaysontop, , A
+^f8::  Winset, Alwaysontop, , A ; ctrl+f8 make active window alwayse on top
