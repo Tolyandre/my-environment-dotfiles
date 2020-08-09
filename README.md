@@ -1,28 +1,25 @@
-# Windows development environment as code
-This repo is settings of my development environment on Windows. Inspired by term Infrastructure-as-Code.
-
-Goals:
-- sync things like hotkeys over my home and work machines;
-- git history to recall which tools I used and how configured them;
-- quick environment and software restore, just in case.
-However, that requires to script every change.
+# My environment settings on Windows
+Including:
+- console prompt
+- hotkeys
+- tools
 
 ## Files
 ### Choco_installs.ps1
 Installs tools.
 
-### AlwaysOnTop.ahk
-Hotkeys. Should go to autoruns folder.
+### Hotkeys.ahk
+Hotkey to make a window always on top.
 
 ### profile.ps1
-Powershell profile with git prompt and some config for Unix tools.
+PowerShell profile
+- git prompt using posh-git
+- fix encoding to run git-bash tools in PowerShell
 
 ### ConEmu.xml
-My terminal settings. Normally goes to `C:\Users\%user%\AppData\Roaming\ConEmu.xml`.
+My ConEmu terminal settings.
 
-## TODO
-- add more configs:
-    - Fiddler,
-    - ConEmu;
-- automatically sync files;
-- test automated install on virtual machine.
+![ConEmu and PowerShell prompt](Readme_images/ConEmu_and_PowerShell_prompt.png)
+
+### Set_hard_links.ps1
+Makes git working directory files to be hard links to actual settings. This is useful to compare and commit changes in a system. Note that `git checkout` replaces hard links with normal files, not touching actual files.
