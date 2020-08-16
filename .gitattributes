@@ -1,1 +1,1 @@
-Settings/ConEmu.xml filter=git-ignore-line
+Settings/ConEmu.xml filter=ignore-line ignore-regex=ConWnd[[:space:]](X|Y|Width|Height) ignore-regex1=\.Vanilla
