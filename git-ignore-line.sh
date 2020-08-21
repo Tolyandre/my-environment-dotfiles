@@ -40,6 +40,6 @@ then
 
    diff --unified=0 -I 'git-ignore-line' \
       <(grep -vE -f <(echo "$attributes") -- /dev/stdin) \
-      <(grep -vE -f <(echo "$attributes") -- $tmpfile) |\
+      <(grep -vE -f <(echo "$attributes") -- $smudge) |\
       patch $smudge -o - --quiet --batch
 fi
