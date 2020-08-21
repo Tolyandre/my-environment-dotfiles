@@ -1,1 +1,2 @@
-Settings/ConEmu.xml filter=ignore-line ignore-regex=ConWnd[[:space:]](X|Y|Width|Height) ignore-regex1=\.Vanilla
+Settings/ConEmu.xml filter=ignore-line
+Settings/ConEmu.xml ignore-regex=ConWnd[[:space:]](X|Y|Width|Height) ignore-regex1=\.Vanilla

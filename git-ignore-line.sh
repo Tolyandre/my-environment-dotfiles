@@ -14,25 +14,16 @@ done
 
 if [ $clean ]
 then
-   #git show HEAD:$clean
-   #cat $clean
-
    tmpfile=$(mktemp)
    trap "{ rm -f $tmpfile; }" EXIT
 
+   attributes=$(git check-attr -a $clean | awk '$2 ~ /ignore-regex\d*/ { print $3 }')
+
    git show HEAD:$clean > $tmpfile
 
-   diff --unified=0 \
-   <(grep -vE -f <(git check-attr -a $clean | awk '$2 ~ /ignore-regex\d*/ { print $3 }') -- $tmpfile) \
-   <(grep -vE -f <(git check-attr -a $clean | awk '$2 ~ /ignore-regex\d*/ { print $3 }') -- $clean) |\
+   diff --unified=0 -I 'git-ignore-line' \
+      <(grep -vE -f <(echo "$attributes") -- $tmpfile) \
+      <(grep -vE -f <(echo "$attributes") -- $clean) |\
       patch $tmpfile -o - --quiet --batch
 
-
-   #  git show HEAD:$clean |\
-   #     grep -vE "$ignoreRegex" |\
-   #     diff --unified -I 'ConWnd XXX' <(grep -vE "$ignoreRegex" $clean) - |\
-   #     patch $clean -o - --quiet --batch
 fi
-
-# echo "$pwd I am git-ignore-line" $@
-# echo $((1 + RANDOM % 10))
