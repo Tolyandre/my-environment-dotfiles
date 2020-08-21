@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <key name="Software">
    <!-- test change -->
+   <!-- <test2/> -->
 	<key name="ConEmu">
 		<key name=".Vanilla" modified="2020-08-09 17:03:30" build="180318">
 			<value name="StartType" type="hex" data="02"/>
