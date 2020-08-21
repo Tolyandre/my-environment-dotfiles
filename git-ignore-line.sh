@@ -6,12 +6,12 @@ while [ $# -gt 0 ]; do
    if [[ $1 == *"--"* ]]; then
         param="${1/--/}"
         declare $param="$2"
-        # echo $1 $2 // Optional to see the parameter:value result
    fi
 
    shift
 done
 
+# Clean up ignored changes before staging to commit
 if [ $clean ]
 then
    tmpfile=$(mktemp)
@@ -23,7 +23,23 @@ then
 
    diff --unified=0 -I 'git-ignore-line' \
       <(grep -vE -f <(echo "$attributes") -- $tmpfile) \
-      <(grep -vE -f <(echo "$attributes") -- $clean) |\
+      <(grep -vE -f <(echo "$attributes") -- /dev/stdin) |\
       patch $tmpfile -o - --quiet --batch
+fi
 
+# Restore ignored changes on checkout
+if [ $smudge ]
+then
+
+   tmpfile=$(mktemp)
+   trap "{ rm -f $tmpfile; }" EXIT
+
+   attributes=$(git check-attr -a $smudge | awk '$2 ~ /ignore-regex\d*/ { print $3 }')
+
+   git show HEAD:$smudge > $tmpfile
+
+   diff --unified=0 -I 'git-ignore-line' \
+      <(grep -vE -f <(echo "$attributes") -- /dev/stdin) \
+      <(grep -vE -f <(echo "$attributes") -- $tmpfile) |\
+      patch $smudge -o - --quiet --batch
 fi
