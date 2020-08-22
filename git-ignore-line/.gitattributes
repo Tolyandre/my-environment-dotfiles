@@ -1,0 +1,2 @@
+testfile.txt filter=ignore-line
+testfile.txt ignore-regex=ConWnd[[:space:]](X|Y|Width|Height) ignore-regex1=\.Vanilla

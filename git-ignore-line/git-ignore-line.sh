@@ -24,6 +24,12 @@ then
 
    git show HEAD:$clean > $tmpfile
 
+   # if repository is just initialized, handle error "fatal: invalid object name 'HEAD'"
+   if [ $? -ne 0 ]; then
+      cat /dev/stdin
+      exit
+   fi
+
       #<(grep -vE -f <(echo "$attributes") -- $tmpfile) \
       #<(grep -vE -f <(echo "$attributes") -- /dev/stdin) \
    diff --unified=0 -I 'git-ignore-line' $attributes \
@@ -46,7 +52,7 @@ then
 
    if [ -f "$smudge" ]; then
          #<(grep -vE -f <(echo "$attributes") -- /dev/stdin) \
-         #<(grep -vE -f <(echo "$attributes") -- $smudge) \
+   #<(grep -vE -f <(echo "$attributes") -- $smudge) \
       diff --unified=0 -I 'git-ignore-line' $attributes \
          $smudge /dev/stdin \
          | patch $smudge -o - --quiet --batch
