@@ -14,32 +14,44 @@ done
 # Clean up ignored changes before staging to commit
 if [ $clean ]
 then
+   echo Clean message >&2
+
    tmpfile=$(mktemp)
    trap "{ rm -f $tmpfile; }" EXIT
 
-   attributes=$(git check-attr -a $clean | awk '$2 ~ /ignore-regex\d*/ { print $3 }')
+   # attributes=$(git check-attr -a $clean | awk '$2 ~ /ignore-regex\d*/ { print $3 }')
+   attributes=$(git check-attr -a $clean | awk '$2 ~ /ignore-regex\d*/ { print "-I \x27"$3"\x27" }')
 
    git show HEAD:$clean > $tmpfile
 
-   diff --unified=0 -I 'git-ignore-line' \
-      <(grep -vE -f <(echo "$attributes") -- $tmpfile) \
-      <(grep -vE -f <(echo "$attributes") -- /dev/stdin) |\
-      patch $tmpfile -o - --quiet --batch
+      #<(grep -vE -f <(echo "$attributes") -- $tmpfile) \
+      #<(grep -vE -f <(echo "$attributes") -- /dev/stdin) \
+   diff --unified=0 -I 'git-ignore-line' $attributes \
+      $tmpfile /dev/stdin \
+      | patch $tmpfile -o - --quiet --batch
 fi
 
 # Restore ignored changes on checkout
 if [ $smudge ]
 then
+   echo Smudge message >&2
 
    tmpfile=$(mktemp)
    trap "{ rm -f $tmpfile; }" EXIT
 
-   attributes=$(git check-attr -a $smudge | awk '$2 ~ /ignore-regex\d*/ { print $3 }')
+   #attributes=$(git check-attr -a $smudge | awk '$2 ~ /ignore-regex\d*/ { print $3 }')
+   attributes=$(git check-attr -a $smudge | awk '$2 ~ /ignore-regex\d*/ { print "-I \x27"$3"\x27" }')
 
    git show HEAD:$smudge > $tmpfile
 
-   diff --unified=0 -I 'git-ignore-line' \
-      <(grep -vE -f <(echo "$attributes") -- /dev/stdin) \
-      <(grep -vE -f <(echo "$attributes") -- $smudge) |\
-      patch $smudge -o - --quiet --batch
+   if [ -f "$smudge" ]; then
+         #<(grep -vE -f <(echo "$attributes") -- /dev/stdin) \
+         #<(grep -vE -f <(echo "$attributes") -- $smudge) \
+      diff --unified=0 -I 'git-ignore-line' $attributes \
+         $smudge /dev/stdin \
+         | patch $smudge -o - --quiet --batch
+   else
+      cat /dev/stdin
+   fi
+
 fi
