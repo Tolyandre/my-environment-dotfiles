@@ -3,6 +3,9 @@ FROM bats/bats:1.2.1 AS bats
 
 FROM bitnami/git:2.28.0-debian-10-r14
 
+# install tput for bats
+#RUN apt-get update && apt-get install libncurses5-dbg
+
 RUN ln -s /opt/bats/bin/bats /usr/sbin/bats
 COPY --from=bats /opt/bats/ /opt/bats/
 
@@ -17,4 +20,4 @@ COPY . .
 
 RUN git add . && git commit -m'Initial test repo commit'
 #ENTRYPOINT ["sh", "/usr/sbin/bats"]
-ENTRYPOINT ["sh", "/git-ignore-line/test1.sh"]
+ENTRYPOINT ["bats", "."]
