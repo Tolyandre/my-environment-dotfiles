@@ -1,2 +1,2 @@
-testfile.txt filter=ignore-line
-testfile.txt ignore-regex=ConWnd[[:space:]](X|Y|Width|Height) ignore-regex1=\.Vanilla
+testfile2.xml filter=ignore-line
+testfile2.xml ignore-regex=ConWnd[[:space:]](X|Y|Width|Height) ignore-regex1=Antelope
