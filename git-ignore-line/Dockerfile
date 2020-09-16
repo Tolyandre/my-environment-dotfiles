@@ -5,7 +5,7 @@ FROM bitnami/git:2.28.0-debian-10-r14
 
 # install tput for bats
 RUN apt-get update && apt-get install -y ncurses-bin patch
-ENV TERM xterm-256color
+#ENV TERM xterm-256color
 
 RUN ln -s /opt/bats/bin/bats /usr/sbin/bats
 COPY --from=bats /opt/bats/ /opt/bats/

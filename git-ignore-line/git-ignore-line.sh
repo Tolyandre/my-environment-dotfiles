@@ -20,9 +20,13 @@ then
    trap "{ rm -f $tmpfile; }" EXIT
 
    # attributes=$(git check-attr -a $clean | awk '$2 ~ /ignore-regex\d*/ { print $3 }')
-   attributes=$(git check-attr -a $clean | awk '$2 ~ /ignore-regex\d*/ { print "-I \x27"$3"\x27" }')
+   #attributes=$(git check-attr -a $clean | awk '$2 ~ /ignore-regex\d*/ { print "-I \x27"$3"\x27" }')
+   my_array=()
+   mapfile -t my_array < <(git check-attr -a testfile2.xml | awk '$2 ~ /ignore-regex\d*/ { print "-I\n"$3 }')
 
    git show HEAD:$clean > $tmpfile
+
+   #echo $attributes >&2
 
    # if repository is just initialized, handle error "fatal: invalid object name 'HEAD'"
    if [ $? -ne 0 ]; then
@@ -32,7 +36,8 @@ then
 
       #<(grep -vE -f <(echo "$attributes") -- $tmpfile) \
       #<(grep -vE -f <(echo "$attributes") -- /dev/stdin) \
-   diff --unified=0 -I 'git-ignore-line' $attributes \
+   #diff --unified=0 -I 'git-ignore-line' $attributes \
+   diff --unified=0 -I 'git-ignore-line' ${my_array[@]} \
       $tmpfile /dev/stdin \
       | patch $tmpfile -o - --quiet --batch
 fi
