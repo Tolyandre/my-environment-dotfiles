@@ -22,7 +22,7 @@ then
    # attributes=$(git check-attr -a $clean | awk '$2 ~ /ignore-regex\d*/ { print $3 }')
    #attributes=$(git check-attr -a $clean | awk '$2 ~ /ignore-regex\d*/ { print "-I \x27"$3"\x27" }')
    my_array=()
-   mapfile -t my_array < <(git check-attr -a testfile2.xml | awk '$2 ~ /ignore-regex\d*/ { print "-I\n"$3 }')
+   mapfile -t my_array < <(git check-attr -a $clean | awk '$2 ~ /ignore-regex\d*/ { print "-I\n"$3 }')
 
    git show HEAD:$clean > $tmpfile
 
@@ -37,9 +37,11 @@ then
       #<(grep -vE -f <(echo "$attributes") -- $tmpfile) \
       #<(grep -vE -f <(echo "$attributes") -- /dev/stdin) \
    #diff --unified=0 -I 'git-ignore-line' $attributes \
-   diff --unified=0 -I 'git-ignore-line' ${my_array[@]} \
+   diff --unified=0 ${my_array[@]} -I 'git-ignore-line' \
       $tmpfile /dev/stdin \
+      | awk '{if($0 ~ /git-ignore-line/){sub(/^-/, "+", last); print last} else {print $0} {last=$0}}' \
       | patch $tmpfile -o - --quiet --batch
+      # | awk '{if($0 ~ /ignore/){sub(/-/, " +", last); print last} else {print $0} {last=$0}}' \
 fi
 
 # Restore ignored changes on checkout
@@ -51,14 +53,16 @@ then
    trap "{ rm -f $tmpfile; }" EXIT
 
    #attributes=$(git check-attr -a $smudge | awk '$2 ~ /ignore-regex\d*/ { print $3 }')
-   attributes=$(git check-attr -a $smudge | awk '$2 ~ /ignore-regex\d*/ { print "-I \x27"$3"\x27" }')
+   #attributes=$(git check-attr -a $smudge | awk '$2 ~ /ignore-regex\d*/ { print "-I \x27"$3"\x27" }')
+   my_array=()
+   mapfile -t my_array < <(git check-attr -a $smudge | awk '$2 ~ /ignore-regex\d*/ { print "-I\n"$3 }')
 
    git show HEAD:$smudge > $tmpfile
 
    if [ -f "$smudge" ]; then
          #<(grep -vE -f <(echo "$attributes") -- /dev/stdin) \
    #<(grep -vE -f <(echo "$attributes") -- $smudge) \
-      diff --unified=0 -I 'git-ignore-line' $attributes \
+      diff --unified=0 -I 'git-ignore-line' ${my_array[@]} \
          $smudge /dev/stdin \
          | patch $smudge -o - --quiet --batch
    else
