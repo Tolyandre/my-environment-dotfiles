@@ -1,7 +1,7 @@
 #!/usr/bin/env bats
 
 function teardown {
-  git reset
+  git reset initialCommit --hard
   git checkout .
 }
 
@@ -23,12 +23,24 @@ function teardown {
   [ "$result" = "" ]
 }
 
-@test "Checkout only overrides not ignored changes" {
+@test "On commit all but ignored lines are saved" {
   cp testfile3.modified.txt testfile3.txt
+  git add testfile3.txt
+  git commit -m"test 3"
+
+  diff -u testfile3.expected.txt <(git show HEAD:testfile3.txt)
+  [ $? -eq 0 ]
+}
+
+@test "Checkout only overrides not ignored changes" {
+ # skip 'smudge script is no working. Git deletes $smudge file before running a filter'
+  cp testfile4.modified.txt testfile4.txt
  
   git checkout HEAD
-  diff -u testfile3.txt testfile3.expected.txt
 
-  result=$(echo $(git status --porcelain -- testfile3.txt))
+  diff -u testfile4.txt testfile4.expected.txt
+  [  $? -eq 0 ]
+
+  result=$(echo $(git status --porcelain -- testfile4.txt))
   [ "$result" = "" ]
 }

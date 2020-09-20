@@ -11,61 +11,48 @@ while [ $# -gt 0 ]; do
    shift
 done
 
-# Clean up ignored changes before staging to commit
+# Clean up ignored changes before staging
+# $clean is file being processed
 if [ $clean ]
 then
-   echo Clean message >&2
+   stdinTemp=$(mktemp)
+   trap "{ rm -f $stdinTemp; }" EXIT
+   cat /dev/stdin> $stdinTemp
 
-   tmpfile=$(mktemp)
-   trap "{ rm -f $tmpfile; }" EXIT
+   fileFromHead=$(mktemp)
+   trap "{ rm -f $fileFromHead; }" EXIT
+   git show HEAD:$clean > $fileFromHead 2> /dev/null
 
-   # attributes=$(git check-attr -a $clean | awk '$2 ~ /ignore-regex\d*/ { print $3 }')
-   #attributes=$(git check-attr -a $clean | awk '$2 ~ /ignore-regex\d*/ { print "-I \x27"$3"\x27" }')
-   my_array=()
-   mapfile -t my_array < <(git check-attr -a $clean | awk '$2 ~ /ignore-regex\d*/ { print "-I\n"$3 }')
-
-   git show HEAD:$clean > $tmpfile
-
-   #echo $attributes >&2
-
-   # if repository is just initialized, handle error "fatal: invalid object name 'HEAD'"
+   # handle error "fatal: invalid object name 'HEAD'" from `git show`
+   # it occures when repository is just initialized
    if [ $? -ne 0 ]; then
-      cat /dev/stdin
+      cat $stdinTemp
       exit
    fi
 
-      #<(grep -vE -f <(echo "$attributes") -- $tmpfile) \
-      #<(grep -vE -f <(echo "$attributes") -- /dev/stdin) \
-   #diff --unified=0 -I 'git-ignore-line' $attributes \
-   diff --unified=0 ${my_array[@]} -I 'git-ignore-line' \
-      $tmpfile /dev/stdin \
+   attributes=()
+   mapfile -t attributes < <(git check-attr -a $clean | awk '$2 ~ /ignore-regex\d*/ { print "-I\n"$3 }')
+
+   #echo 'Clean filter is running (git-ignore-line)' >&2
+
+   diff --unified=0 ${attributes[@]} \
+      $fileFromHead $stdinTemp \
       | awk '{if($0 ~ /git-ignore-line/){sub(/^-/, "+", last); print last} else {print $0} {last=$0}}' \
-      | patch $tmpfile -o - --quiet --batch
+      | patch $fileFromHead -o - --quiet --batch
+
 fi
 
 # Restore ignored changes on checkout
+# $smudge is file being processed
 if [ $smudge ]
 then
-   echo Smudge message >&2
-
-   tmpfile=$(mktemp)
-   trap "{ rm -f $tmpfile; }" EXIT
-
-   #attributes=$(git check-attr -a $smudge | awk '$2 ~ /ignore-regex\d*/ { print $3 }')
-   #attributes=$(git check-attr -a $smudge | awk '$2 ~ /ignore-regex\d*/ { print "-I \x27"$3"\x27" }')
-   my_array=()
-   mapfile -t my_array < <(git check-attr -a $smudge | awk '$2 ~ /ignore-regex\d*/ { print "-I\n"$3 }')
-
-   git show HEAD:$smudge > $tmpfile
-
-   cat $smudge >&2
-   ls >&2
+   attributes=()
+   mapfile -t attributes < <(git check-attr -a $smudge | awk '$2 ~ /ignore-regex\d*/ { print "-I\n"$3 }')
 
    if [ -f "$smudge" ]; then
-      echo smudge file exists >&2
-         #<(grep -vE -f <(echo "$attributes") -- /dev/stdin) \
-         #<(grep -vE -f <(echo "$attributes") -- $smudge) \
-      diff --unified=0 -I 'git-ignore-line' ${my_array[@]} \
+      echo 'Smudge filter is running (git-ignore-line)' >&2
+
+      diff --unified=0 -I 'git-ignore-line' ${attributes[@]} \
          $smudge /dev/stdin \
          | patch $smudge -o - --quiet --batch
    else

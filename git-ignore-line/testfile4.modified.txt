@@ -1,6 +1,6 @@
 Cow
 Rabbit
-Duck        edited line, ignored in .gitattributes
+Duck        edited line, ignored
 Shrimp
 Pig
 Goat

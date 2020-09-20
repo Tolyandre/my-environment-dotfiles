@@ -1,13 +1,13 @@
 Cow
 Rabbit
-Duck
+Duck        edited line, ignored
 Shrimp
 Pig
 Goat
 Crab
 Deer
 Bee
-Sheep       edited line, not ignored
+Sheep
 Fish
 Turkey
 Dove

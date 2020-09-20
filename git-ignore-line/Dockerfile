@@ -19,6 +19,7 @@ RUN git init \
 
 COPY . .
 
-RUN git add . && git commit -m'Initial test repo commit'
+RUN git add . && git commit -m'Initial test repo commit' \
+    && git tag -a initialCommit -m'initial commit tag'
 #ENTRYPOINT ["sh", "/usr/sbin/bats"]
 ENTRYPOINT ["bats", "-p", "."]
