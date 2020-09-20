@@ -1,0 +1,26 @@
+Cow
+Rabbit
+Duck        edited line, ignored in .gitattributes
+Shrimp
+Pig
+Goat
+Crab
+Deer
+Bee
+Sheep       edited line, ignored by comment     git-ignore-line
+Fish
+Turkey
+Dove
+Chicken
+Horse
+
+Rabbits (indoor or outdoor)     ignored by regex with spaces
+Guinea Pigs
+Ferrets
+Cats (indoor or outdoor)
+Dogs
+Caged rodents, such as rats and hamsters
+Small birds
+Large birds
+Fish
+Turtles

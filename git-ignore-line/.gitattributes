@@ -1,0 +1,8 @@
+testfile2.txt filter=ignore-line
+testfile2.txt ignore-regex=indoor[[:space:]]or[[:space:]]outdoor ignore-regex1=Duck
+
+testfile3.txt filter=ignore-line
+testfile3.txt ignore-regex1=Duck
+
+testfile4.txt filter=ignore-line
+testfile4.txt ignore-regex=Duck

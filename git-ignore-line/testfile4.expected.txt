@@ -1,0 +1,15 @@
+Cow
+Rabbit
+Duck        edited line, ignored
+Shrimp
+Pig
+Goat
+Crab
+Deer
+Bee
+Sheep
+Fish
+Turkey
+Dove
+Chicken
+Horse
