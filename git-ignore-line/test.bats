@@ -1,17 +1,8 @@
 #!/usr/bin/env bats
 
-function setup {
-
-}
-
 function teardown {
   git reset
   git checkout .
-}
-
-@test "addition using bc" {
-  result="$(echo 2+2 | bc)"
-  [ "$result" -eq 4 ]
 }
 
 @test "When file is modified and no git attributes, git shows file as modified" {
@@ -32,8 +23,12 @@ function teardown {
   [ "$result" = "" ]
 }
 
-@test "Checkout does not override ignored change" {
+@test "Checkout only overrides not ignored changes" {
   cp testfile3.modified.txt testfile3.txt
-  
+ 
+  git checkout HEAD
+  diff -u testfile3.txt testfile3.expected.txt
 
+  result=$(echo $(git status --porcelain -- testfile3.txt))
+  [ "$result" = "" ]
 }

@@ -41,7 +41,6 @@ then
       $tmpfile /dev/stdin \
       | awk '{if($0 ~ /git-ignore-line/){sub(/^-/, "+", last); print last} else {print $0} {last=$0}}' \
       | patch $tmpfile -o - --quiet --batch
-      # | awk '{if($0 ~ /ignore/){sub(/-/, " +", last); print last} else {print $0} {last=$0}}' \
 fi
 
 # Restore ignored changes on checkout
@@ -59,13 +58,18 @@ then
 
    git show HEAD:$smudge > $tmpfile
 
+   cat $smudge >&2
+   ls >&2
+
    if [ -f "$smudge" ]; then
+      echo smudge file exists >&2
          #<(grep -vE -f <(echo "$attributes") -- /dev/stdin) \
-   #<(grep -vE -f <(echo "$attributes") -- $smudge) \
+         #<(grep -vE -f <(echo "$attributes") -- $smudge) \
       diff --unified=0 -I 'git-ignore-line' ${my_array[@]} \
          $smudge /dev/stdin \
          | patch $smudge -o - --quiet --batch
    else
+      echo smudge file does NOT exist >&2
       cat /dev/stdin
    fi
 

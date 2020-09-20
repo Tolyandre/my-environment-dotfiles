@@ -1,2 +1,5 @@
 testfile2.txt filter=ignore-line
-testfile2.txt ignore-regex=ConWnd[[:space:]](X|Y|Width|Height) ignore-regex1=Duck
+testfile2.txt ignore-regex=indoor[[:space:]]or[[:space:]]outdoor ignore-regex1=Duck
+
+testfile3.txt filter=ignore-line
+testfile3.txt ignore-regex=Duck
