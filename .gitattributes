@@ -1,2 +1,6 @@
+# all bash scripts should have lf endings, even on Windows
+# useful when building dockerfiles on windows, because docker does not convert line endings
+*.sh text eol=lf
+
 Settings/ConEmu.xml filter=ignore-line
 Settings/ConEmu.xml ignore-regex=ConWnd[[:space:]]\(X\|Y\|Width\|Height\) ignore-regex1=\.Vanilla
