@@ -6,3 +6,6 @@ testfile3.txt ignore-regex1=Duck
 
 testfile4.txt filter=ignore-line
 testfile4.txt ignore-regex=Duck
+
+testfile5.xml filter=ignore-line
+testfile5.xml ignore-regex=ConWnd[[:space:]]\(X\|Y\|Width\|Height\)

@@ -44,3 +44,13 @@ function teardown {
   result=$(echo $(git status --porcelain -- testfile4.txt))
   [ "$result" = "" ]
 }
+
+@test "Ignore by regexp with pipes and brackets" {
+  cp testfile5.modified.xml testfile5.xml
+  git add testfile5.xml
+  result=$(echo $(git status --porcelain -- testfile5.xml))
+  echo "result is $result"
+  git diff --cached -- testfile5.xml
+  
+  [ "$result" = "" ] 
+}
