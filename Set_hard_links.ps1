@@ -13,7 +13,11 @@ $LinksToSystemFiles = @{
 $LinksToSystemFiles.GetEnumerator() | % {
 
     if (-Not (Test-Path $_.Value -PathType Leaf)) {
-        Move-Item $_.Name $_.Value
+        # Create the folder structure and empty destination file, similar to
+        # the Unix 'touch' command
+        New-Item -ItemType File -Path $_.Value -Force
+
+        Move-Item $_.Name $_.Value -Force
     }
 
     Remove-Item $_.Name;

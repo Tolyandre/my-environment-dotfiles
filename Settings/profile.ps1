@@ -9,7 +9,11 @@ $Env:LC_ALL='C.UTF-8' # for git log
 # $Env:LANG='en_US.UTF-8' # 
 $Env:TERM='xterm-256color' # for unix tools like tig
 
-# Install-Module posh-git
+if (!(Get-Module -ListAvailable -Name posh-git)) {
+    Write-Host "Module posh-git is not installed. It will be installed now."
+    Install-Module posh-git
+}
+
 Import-Module posh-git
 
 # based on https://stackoverflow.com/a/44411205/843449
