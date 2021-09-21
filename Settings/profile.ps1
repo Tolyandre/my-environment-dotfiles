@@ -9,11 +9,10 @@ $Env:LC_ALL='C.UTF-8' # for git log
 # $Env:LANG='en_US.UTF-8' # 
 $Env:TERM='xterm-256color' # for unix tools like tig
 
-if (!(Get-Module -ListAvailable -Name posh-git)) {
-    Write-Host "Module posh-git is not installed. It will be installed now."
-    Install-Module posh-git
-}
+# for less.exe from choco, based on https://stackoverflow.com/a/59240939/843449
+$OutputEncoding = [console]::OutputEncoding = [Text.Utf8Encoding]::new()
 
+# Install-Module posh-git
 Import-Module posh-git
 
 # based on https://stackoverflow.com/a/44411205/843449
@@ -93,3 +92,10 @@ function prompt
  
     return " "
 }
+
+
+#region conda initialize
+# !! Contents within this block are managed by 'conda init' !!
+(& "C:\Users\Tolya\miniconda3\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | Invoke-Expression
+#endregion
+
